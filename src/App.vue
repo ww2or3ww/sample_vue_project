@@ -1,28 +1,57 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <v-navigation-drawer app v-model="drawer">
+      <v-list nav dense>
+        <v-list-item-group>
+          <v-list-item>
+            <v-list-item-title>HOME</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title>ABOUT</v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar app>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>
+        Sample Vue Project
+      </v-toolbar-title> 
+    </v-app-bar>
+
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+
+    <v-footer app>
+      <v-card-title>
+        <v-btn fab small class="mx-2" color="white" href="https://twitter.com/w2or3w" target="_blank">
+          <v-icon>mdi-twitter</v-icon>
+        </v-btn>
+        <v-btn fab small class="mx-2" color="white" href="https://www.facebook.com/w2or3w" target="_blank">
+          <v-icon>mdi-facebook</v-icon>
+        </v-btn>
+        <v-btn fab small class="mx-2" color="white" href="https://www.instagram.com/w2or3w" target="_blank">
+          <v-icon>mdi-instagram</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-card-text>
+        <p>Copyright © Sample Vue Project</p>
+      </v-card-text>
+    </v-footer>
+    
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    HelloWorld
-  }
-}
-</script>
+  },
+  data: () => ({
+    drawer: false,
+  }),
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+};
+</script>
