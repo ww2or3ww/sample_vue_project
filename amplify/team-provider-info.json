@@ -1,0 +1,19 @@
+{
+    "work": {
+        "awscloudformation": {
+            "AuthRoleName": "samplevueproject-work-20191229214057-authRole",
+            "UnauthRoleArn": "arn:aws:iam::625172726696:role/samplevueproject-work-20191229214057-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::625172726696:role/samplevueproject-work-20191229214057-authRole",
+            "Region": "ap-northeast-1",
+            "DeploymentBucketName": "samplevueproject-work-20191229214057-deployment",
+            "UnauthRoleName": "samplevueproject-work-20191229214057-unauthRole",
+            "StackName": "samplevueproject-work-20191229214057",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:625172726696:stack/samplevueproject-work-20191229214057/e648bb30-2a83-11ea-aa28-0eb7b90bbf8e"
+        },
+        "categories": {
+            "auth": {
+                "samplevueproject7d725456": {}
+            }
+        }
+    }
+}
