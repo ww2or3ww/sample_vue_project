@@ -19,7 +19,7 @@ export default {
   name: 'Home',
   data: () => ({
     loginid: "sample-vue-project-user", 
-    loginpw: "sample-vue-project-user-password", 
+    loginpw: "sample-vue-project-user", 
   }), 
   mounted: async function() {
     this.login();
