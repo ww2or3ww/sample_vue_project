@@ -18,8 +18,8 @@ import { Auth, Storage } from 'aws-amplify';
 export default {
   name: 'Home',
   data: () => ({
-    loginid: "sample-vue-project-user3", 
-    loginpw: "sample-vue-project-user3", 
+    loginid: "sample-vue-project-user", 
+    loginpw: "sample-vue-project-user-password", 
   }), 
   mounted: async function() {
     this.login();
