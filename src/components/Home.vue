@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { Auth, Storage } from 'aws-amplify';
 
 export default {
@@ -70,10 +71,14 @@ export default {
       Storage.put(filePath, file).then(result => {
         console.log(result);
       }).catch(err => console.log(err));
+      
+      this.$router.push({ path: 'list', query: { group: dirName }});
     }, 
     
     getDirString(date){
-      let random = (date.getTime() + Math.floor(1000 * Math.random())).toString(16);
+      let random = date.getTime() + Math.floor(100000 * Math.random());
+      random = Math.random() * random;
+      random = Math.floor(random).toString(16);
       return "" + 
         ("00" + date.getUTCFullYear()).slice(-2) + 
         ("00" + (date.getMonth() + 1)).slice(-2) + 
@@ -86,4 +91,3 @@ export default {
   }
 }
 </script>
-
