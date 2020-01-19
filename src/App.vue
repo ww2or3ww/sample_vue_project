@@ -100,11 +100,9 @@ export default {
       if(versionFromAPI != versionFromCookies){
         console.log("version updated. reloading...");
         if(window.navigator && window.navigator.serviceWorker) {
-          window.navigator.serviceWorker.getRegistrations()
-          .then(function(registrations) {
-            for(let registration of registrations) {
-              registration.unregister();
-            }
+          window.navigator.serviceWorker.getRegistration()
+            .then(registration => {
+            registration.unregister();
           });
         }
         window.location.reload(true);
