@@ -3,7 +3,7 @@
   "short_name": "SampleApp",
   "theme_color": "#512da8",
   "background_color": "#ff5722",
-  "display": "browser",
+  "display": "standalone",
   "Scope": "/",
   "start_url": "/",
   "icons": [
