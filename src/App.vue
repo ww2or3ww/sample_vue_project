@@ -5,7 +5,7 @@
       <v-list nav dense>
         <v-list-item-group>
           <v-list-item>
-            <v-list-item-title>HOME</v-list-item-title>
+            <v-list-item-title @click="onHome">HOME</v-list-item-title>
           </v-list-item>
           <v-list-item>
             <v-list-item-title>ABOUT</v-list-item-title>
@@ -56,6 +56,8 @@
 <script>
 import Vue from "vue";
 import VueScrollTo from "vue-scrollto";
+import { API, graphqlOperation } from 'aws-amplify';
+import { listSampleAppsyncTables } from "./graphql/queries";
 Vue.use(VueScrollTo, {
   container: "body",
   easing: "ease", 
@@ -72,11 +74,35 @@ export default {
     window.addEventListener("scroll", this.onScreenEvent);
     window.addEventListener("resize", this.onScreenEvent);
     window.addEventListener("load", this.onScreenEvent);
+    this.checkVersion();
   }, 
   methods:{
+    onHome() {
+      if(this.$route.path != '/'){
+        this.$router.push({ path: '/' });
+        this.checkVersion();
+      }
+    }, 
+    
     onScreenEvent() {
       this.isShowUp = window.pageYOffset >= 32;
-    } 
+    }, 
+    
+    async checkVersion() {
+      let apiResult = await API.graphql(graphqlOperation(listSampleAppsyncTables, { group : "version" }));
+      let item = apiResult.data.listSampleAppsyncTables.items[0];
+      let versionFromAPI = item.path;
+      var versionFromCookies = Cookies.get('sub.w2or3w.work.version');
+      console.log("versionFromAPI : " + versionFromAPI);
+      console.log("versionFromCookies : " + versionFromCookies);
+      
+      Cookies.set('sub.w2or3w.work.version', versionFromAPI, { expires: 1 });
+      if(versionFromAPI != versionFromCookies){
+        window.location.reload(true);
+      }
+    }, 
+    
+    
   }
 };
 </script>
