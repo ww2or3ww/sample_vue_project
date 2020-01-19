@@ -98,6 +98,7 @@ export default {
       
       Cookies.set('sub.w2or3w.work.version', versionFromAPI, { expires: 1 });
       if(versionFromAPI != versionFromCookies){
+        alert(versionFromAPI);
         window.location.reload(true);
       }
     }, 
