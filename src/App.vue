@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <div id="return-to-top"></div>
     <v-navigation-drawer app v-model="drawer">
       <v-list nav dense>
         <v-list-item-group>
@@ -40,18 +41,52 @@
         <p>Copyright © Sample Vue Project</p>
       </v-card-text>
     </v-footer>
-    
+
+    <transition name="fade">
+      <v-btn fixed fab bottom right color="#BDBDBD88" style="bottom: 100px" v-show="this.isShowUp"
+        v-scroll-to="{ element: '#return-to-top', duration: 1000 }"
+      >
+        <v-icon color="white">mdi-chevron-up</v-icon>
+      </v-btn>
+    </transition>
+
   </v-app>
 </template>
 
 <script>
+import Vue from "vue";
+import VueScrollTo from "vue-scrollto";
+Vue.use(VueScrollTo, {
+  container: "body",
+  easing: "ease", 
+  cancelable: true
+});
+
 export default {
   name: 'App',
-  components: {
-  },
   data: () => ({
     drawer: false,
+    isShowUp: false,
   }),
-
+  mounted() {
+    window.addEventListener("scroll", this.onScreenEvent);
+    window.addEventListener("resize", this.onScreenEvent);
+    window.addEventListener("load", this.onScreenEvent);
+  }, 
+  methods:{
+    onScreenEvent() {
+      this.isShowUp = window.pageYOffset >= 32;
+    } 
+  }
 };
 </script>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
