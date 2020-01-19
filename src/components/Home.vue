@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <p>ホーム</p>
+    <p>ホーム1</p>
     <router-link to="about" >link to About</router-link>
     <hr>
     <v-btn @click="selectFile">
