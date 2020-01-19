@@ -98,7 +98,15 @@ export default {
       
       Cookies.set('sub.w2or3w.work.version', versionFromAPI, { expires: 1 });
       if(versionFromAPI != versionFromCookies){
-        alert(versionFromAPI);
+        console.log("version updated. reloading...");
+        if(window.navigator && window.navigator.serviceWorker) {
+          window.navigator.serviceWorker.getRegistrations()
+          .then(function(registrations) {
+            for(let registration of registrations) {
+              registration.unregister();
+            }
+          });
+        }
         window.location.reload(true);
       }
     }, 
