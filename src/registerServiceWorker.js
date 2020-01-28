@@ -10,6 +10,19 @@ if (process.env.NODE_ENV === 'production') {
     },
     registered () {
       console.log('Service worker has been registered.')
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('/serviceworker.js')
+          .then(registration => {
+            registration.onupdatefound = function() {
+              console.log('has update.');
+              registration.update();
+            }
+          })
+          .catch(err => {
+            console.log(err);
+        });
+      }
     },
     cached () {
       console.log('Content has been cached for offline use.')

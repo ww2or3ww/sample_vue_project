@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <p>ホーム 0128CCC</p>
+    <p>ホーム 0128XXX</p>
     <router-link to="about" >link to About</router-link>
     <hr>
     <v-btn @click="selectFile">
@@ -100,7 +100,7 @@ export default {
           for(let registration of registrations) {
             this.text += " ----- ";
             this.text += registration;
-            //registration.unregister();
+            registration.unregister();
           }
         });
         
