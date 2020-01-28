@@ -1,10 +1,5 @@
 module.exports = {
-  "devServer": {
-    "host": "0.0.0.0",
-    "public": "0.0.0.0:8080",
-    "disableHostCheck": true
-  },
-  "transpileDependencies": [
-    "vuetify"
-  ]
+    devServer: {
+        public: "fed9513d88324171b593944f5acca30f.vfs.cloud9.ap-northeast-1.amazonaws.com"
+    }
 }

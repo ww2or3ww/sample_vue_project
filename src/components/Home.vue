@@ -6,21 +6,33 @@
     <v-btn @click="selectFile">
       SELECT A FILE !!
     </v-btn>
+    <v-btn @click="onBtnUpdate">
+      UPDATE
+    </v-btn>
     <input style="display: none" 
       ref="input" type="file" 
       @change="uploadSelectedFile()">
+      
+      <span class="wrap" v-text="text"></span>
+
   </v-container>
 </template>
 
 <script>
 import Vue from 'vue'
 import { Auth, Storage } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listSampleAppsyncTables } from "../graphql/queries";
 
 export default {
   name: 'Home',
   data: () => ({
     loginid: "sample-vue-project-user", 
     loginpw: "sample-vue-project-user", 
+    text: "", 
+    newLine: `
+
+    `
   }), 
   mounted: async function() {
     this.login();
@@ -58,6 +70,50 @@ export default {
       }
     }, 
     
+    async onBtnUpdate() {
+      let apiResult = await API.graphql(graphqlOperation(listSampleAppsyncTables, { group : "version" }));
+      let item = apiResult.data.listSampleAppsyncTables.items[0];
+      let versionFromAPI = item.path;
+      var versionFromCookies = Cookies.get('sub.w2or3w.work.version');
+      console.log("versionFromAPI : " + versionFromAPI);
+      console.log("versionFromCookies : " + versionFromCookies);
+      this.text += ("versionFromAPI : " + versionFromAPI + " --- ");
+      this.text += ("versionFromCookies : " + versionFromCookies + " --- "  );
+      
+      Cookies.set('sub.w2or3w.work.version', versionFromAPI, { expires: 1 });
+      if(versionFromAPI != versionFromCookies){
+        console.log("version updated. reloading...");
+        this.text += ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        this.text += ("versionFromAPI : " +  versionFromAPI + "---");
+        this.text += ("versionFromCookies : " + versionFromCookies + "---");
+  
+        this.text += ("window.navigator : " + window.navigator)
+        this.text += ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        this.text += ("window.navigator.serviceWorker : " + window.navigator.serviceWorker)
+        this.text += ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        
+        if(window.navigator && window.navigator.serviceWorker) {
+          window.navigator.serviceWorker.getRegistration()
+            .then(registration => {
+            this.text += "--- registration is ---";
+            this.text += (registration + " --- ");
+          });
+        
+          window.navigator.serviceWorker.getRegistrations()
+          .then(registrations => {
+            this.text += "--- regstration list are ---";
+            this.text += (registrations + " --- ");
+            this.text += (registrations.length + "(counts)");
+            for(let registration of registrations) {
+              this.text += " ----- ";
+              this.text += registration;
+            }
+          });
+          
+        }
+      }
+    }, 
+    
     uploadSelectedFile() {
       let file = this.$refs.input.files[0];
       if(file == undefined){
@@ -68,7 +124,10 @@ export default {
       let dt = new Date();
       let dirName = this.getDirString(dt);
       let filePath = dirName + "/" + file.name;
-      Storage.put(filePath, file).then(result => {
+      filePath = "x/y/z/test.jpg"
+      Storage.put(filePath, file, {
+          level: 'protected'
+      }).then(result => {
         console.log(result);
       }).catch(err => console.log(err));
       
@@ -91,3 +150,4 @@ export default {
   }
 }
 </script>
+
