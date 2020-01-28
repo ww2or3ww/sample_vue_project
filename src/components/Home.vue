@@ -92,25 +92,25 @@ export default {
         this.text += ("window.navigator.serviceWorker : " + window.navigator.serviceWorker)
         this.text += ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
         
-        if(window.navigator && window.navigator.serviceWorker) {
-          window.navigator.serviceWorker.getRegistration()
-            .then(registration => {
-            this.text += "--- registration is ---";
-            this.text += (registration + " --- ");
-          });
+        window.navigator.serviceWorker.getRegistration()
+          .then(registration => {
+          this.text += "--- registration is -->";
+          this.text += (registration + " <-- ");
+        });
+      
+        window.navigator.serviceWorker.getRegistrations()
+        .then(registrations => {
+          this.text += "--- regstration list are ---";
+          this.text += (registrations + " --- ");
+          this.text += (registrations.length + "(counts)");
+          for(let registration of registrations) {
+            this.text += " ----- ";
+            this.text += registration;
+            registration.unregister();
+          }
+        });
         
-          window.navigator.serviceWorker.getRegistrations()
-          .then(registrations => {
-            this.text += "--- regstration list are ---";
-            this.text += (registrations + " --- ");
-            this.text += (registrations.length + "(counts)");
-            for(let registration of registrations) {
-              this.text += " ----- ";
-              this.text += registration;
-            }
-          });
-          
-        }
+        window.location.reload(true);
       }
     }, 
     
