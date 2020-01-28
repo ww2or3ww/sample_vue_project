@@ -74,13 +74,13 @@ export default {
     window.addEventListener("scroll", this.onScreenEvent);
     window.addEventListener("resize", this.onScreenEvent);
     window.addEventListener("load", this.onScreenEvent);
-    this.checkVersion();
+    //this.checkVersion();
   }, 
   methods:{
     onHome() {
       if(this.$route.path != '/'){
         this.$router.push({ path: '/' });
-        this.checkVersion();
+        //this.checkVersion();
       }
     }, 
     
