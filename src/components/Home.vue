@@ -124,7 +124,6 @@ export default {
       let dt = new Date();
       let dirName = this.getDirString(dt);
       let filePath = dirName + "/" + file.name;
-      filePath = "x/y/z/test.jpg"
       Storage.put(filePath, file, {
           level: 'protected'
       }).then(result => {
