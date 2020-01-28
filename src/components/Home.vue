@@ -92,12 +92,6 @@ export default {
         this.text += ("window.navigator.serviceWorker : " + window.navigator.serviceWorker)
         this.text += ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
         
-        window.navigator.serviceWorker.getRegistration()
-          .then(registration => {
-          this.text += "--- registration is -->";
-          this.text += (registration + " <-- ");
-        });
-      
         window.navigator.serviceWorker.getRegistrations()
         .then(registrations => {
           this.text += "--- regstration list are ---";
@@ -106,7 +100,7 @@ export default {
           for(let registration of registrations) {
             this.text += " ----- ";
             this.text += registration;
-            registration.unregister();
+            //registration.unregister();
           }
         });
         
