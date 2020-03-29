@@ -23,6 +23,7 @@ import Vue from 'vue'
 import { Auth, Storage } from 'aws-amplify';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listSampleAppsyncTables } from "../graphql/queries";
+import { createSampleAppsyncTable } from "../graphql/mutations"
 
 export default {
   name: 'Home',
@@ -30,16 +31,19 @@ export default {
     loginid: "sample-vue-project-user", 
     loginpw: "sample-vue-project-user", 
     text: "", 
-    newLine: `
-
-    `
   }), 
   mounted: async function() {
     this.login();
   }, 
   methods:{
     login() {
+      let isLogined = localStorage.getItem("CognitoIdentityServiceProvider.7s4pmt7nben2ldbs8a4rael2mk.LastAuthUser");
+      if(isLogined != null){
+        return;
+      }
+      
       console.log("login.");
+      
       Auth.signIn(this.loginid, this.loginpw)
         .then((data) => {
           if(data.challengeName == "NEW_PASSWORD_REQUIRED"){
@@ -108,7 +112,7 @@ export default {
       }
     }, 
     
-    uploadSelectedFile() {
+    async uploadSelectedFile() {
       let file = this.$refs.input.files[0];
       if(file == undefined){
         return;
@@ -119,10 +123,18 @@ export default {
       let dirName = this.getDirString(dt);
       let filePath = dirName + "/" + file.name;
       Storage.put(filePath, file, {
-          level: 'protected'
+          level: 'public'
       }).then(result => {
         console.log(result);
       }).catch(err => console.log(err));
+      
+      try {
+        // const createData = { group: dirName, path: "start"  };
+        // await API.graphql(graphqlOperation(createSampleAppsyncTable, {input: createData}));
+      } catch (error) {
+        console.log("Error!!!!!!!");
+        console.log(error);
+      }
       
       this.$router.push({ path: 'list', query: { group: dirName }});
     }, 

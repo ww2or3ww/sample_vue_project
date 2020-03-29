@@ -10,6 +10,7 @@ export const listSampleAppsyncTables = `query listSampleAppsyncTables($group: St
     {
       group
       path
+      points
     }
   }
 }

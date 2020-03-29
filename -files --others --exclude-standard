@@ -1,0 +1,10 @@
+package-lock.json
+package.json
+src/App.vue
+src/aws-exports.js
+src/components/Home.vue
+src/components/List.vue
+src/graphql/queries.js
+src/graphql/subscriptions.js
+src/registerServiceWorker.js
+src/router.js

@@ -2,6 +2,7 @@ export const onCreateSampleAppsyncTable = `subscription OnCreateSampleAppsyncTab
     onCreateSampleAppsyncTable(group : $group) {
         group
         path
+        points
     }
 }
 `;

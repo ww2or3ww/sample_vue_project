@@ -16,14 +16,28 @@
         </v-list-item-avatar>
       </v-list-item>
     </v-list>
+    
+    <v-btn v-if="dataList.length > 0" @click="processMosaic">
+      PROCESS MOSAIC
+    </v-btn>
+    
 
   </v-container>
 </template>
 
 <script>
-import { API, graphqlOperation, Storage } from 'aws-amplify';
+import { Auth, API, graphqlOperation, Storage } from 'aws-amplify';
 import { listSampleAppsyncTables } from "../graphql/queries";
 import { onCreateSampleAppsyncTable } from "../graphql/subscriptions";
+import { processApplyMosaic } from "../graphql/mutations";
+
+/*
+import axios from 'axios';
+const apiUrl = "https://g7rf1pbku2.execute-api.ap-northeast-1.amazonaws.com/work/process";
+const config = {headers: {
+    'Content-Type': 'application/json'
+}}
+*/
 
 const dataExpireSeconds = (30 * 60);
 export default {
@@ -31,6 +45,7 @@ export default {
   data: () => ({
     group: null, 
     dataList: [], 
+    myGuid: null, 
   }), 
   mounted: async function() {
     this.getList();
@@ -46,12 +61,14 @@ export default {
       let apiResult = await API.graphql(graphqlOperation(listSampleAppsyncTables, { group : this.group }));
       let listAll = apiResult.data.listSampleAppsyncTables.items;
       for(let data of listAll) {
-        let tmp = { path : data.path, image : "" };
+        let tmp = { path : data.path, image : "", points : data.points };
         let list = [...this.dataList, tmp];
         this.dataList = list;
         console.log("path : " + data.path);
-        Storage.get(data.path.replace('public/', ''), { expires: dataExpireSeconds }).then(result => {
-          tmp.image = result;
+        console.log("points : " + data.points);
+        Storage.get(data.path.replace('public/', ''), 
+          { level: 'public', expires: dataExpireSeconds }).then(result => {
+        tmp.image = result;
           console.log("image : " + result);
         }).catch(err => console.log(err));
       }
@@ -61,17 +78,65 @@ export default {
       ).subscribe({
           next: (eventData) => {
             let data = eventData.value.data.onCreateSampleAppsyncTable;
-            let tmp = { path : data.path, image : "" };
+            let tmp = { path : data.path, image : "", points : data.points };
             let list = [...this.dataList, tmp];
             this.dataList = list;
             console.log("path : " + data.path);
-            Storage.get(data.path.replace('public/', ''), { expires: dataExpireSeconds }).then(result => {
+            console.log("points : " + data.points);
+            Storage.get(data.path.replace('public/', ''), 
+              { level: 'public', expires: dataExpireSeconds }).then(result => {
               tmp.image = result;
               console.log("image : " + result);
             }).catch(err => console.log(err));
           }
       });
+    },
+    async processMosaic() {
+      let pointsList = [];
+      let orgKey = "";
+      for(let index = 0; index < this.dataList.length; index++) {
+        let data = this.dataList[index];
+        if(data.points != "-"){
+          pointsList.push(data.points);
+        }else if(data.path.startsWith("public/processed") == false){
+          orgKey = data.path;
+        }
+      }
+      this.myGuid = this.getGUIDString(new Date());
+      let requestData = { guid: this.myGuid, orgKey: orgKey, pointsList: pointsList }; 
+      console.log("requestData=");
+      console.log(requestData);
+      
+      
+      let apiResult = await API.graphql(graphqlOperation(processApplyMosaic, 
+        {input : {guid: this.myGuid, orgKey: orgKey, pointsList: pointsList}})
+      ).catch(error => {
+        console.error(error);
+      });
+      
+      console.log("apiResult=");
+      console.log(apiResult);
+
+      /*
+      const currSession = await Auth.currentSession();
+      config.headers["Authorization"] = currSession.getIdToken().getJwtToken();
+
+      axios
+      .post(apiUrl, requestData, config)
+      .then(response => {
+          let result = response.data
+          console.log(result)
+      })
+      .catch(error => console.log(error))*/
     }, 
+    
+    getGUIDString(date){
+      let random = date.getTime() + Math.floor(100000 * Math.random());
+      random = Math.random() * random;
+      random = Math.floor(random).toString(16);
+      return random;
+    }, 
+
   }
 }
 </script>

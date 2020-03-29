@@ -8,7 +8,10 @@
             <v-list-item-title @click="onHome">HOME</v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title>ABOUT</v-list-item-title>
+            <v-list-item-title @click="onAbout">ABOUT</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title @click="onMail">MAIL</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -74,16 +77,26 @@ export default {
     window.addEventListener("scroll", this.onScreenEvent);
     window.addEventListener("resize", this.onScreenEvent);
     window.addEventListener("load", this.onScreenEvent);
-    //this.checkVersion();
+    this.checkVersion();
   }, 
   methods:{
     onHome() {
       if(this.$route.path != '/'){
         this.$router.push({ path: '/' });
-        //this.checkVersion();
+        this.checkVersion();
       }
     }, 
-    
+    onAbout() {
+      if(this.$route.path != '/about'){
+        this.$router.push({ path: 'about' });
+      }
+    }, 
+    onMail() {
+      if(this.$route.path != '/mail'){
+        this.$router.push({ path: 'mail' });
+      }
+    }, 
+
     onScreenEvent() {
       this.isShowUp = window.pageYOffset >= 32;
     }, 
